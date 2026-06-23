@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions Log | Kruthika Collections</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="navbar-container">
+            <div class="logo-area">
+                <img src="logo.jpeg" alt="Kruthika Collections Logo" class="logo-img">
+                <span class="brand-name">Kruthika Collections</span>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Services</a>
+                        <div class="dropdown-content">
+                            <a href="#">Korean Earrings</a>
+                            <a href="#">Earrings</a>
+                            <a href="#">Bracelets</a>
+                            <a href="#">Customized Bangles</a>
+                            <a href="#">Hair Accessories</a>
+                            <a href="#">Rubber Bands</a>
+                            <a href="#">Chains & Earrings</a>
+                        </div>
+                    </li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="submissions.html" class="active">Submissions</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="submissions-section">
+        <div class="submissions-container">
+            <h2>Logged Custom Requests</h2>
+            <p class="subtitle">Review the contact information and design messages currently saved locally in your web browser environment.</p>
+            
+            <div id="submissionsGrid" class="submissions-grid"></div>
+            
+            <div class="actions-row">
+                <button id="clearDataBtn" class="clear-btn">Clear Local Storage Logs</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Kruthika Collections. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const gridContainer = document.getElementById('submissionsGrid');
+            const clearBtn = document.getElementById('clearDataBtn');
+
+            function displayEntries() {
+                let submissions = JSON.parse(localStorage.getItem("contacts")) || [];
+                gridContainer.innerHTML = ""; 
+
+                if (submissions.length === 0) {
+                    gridContainer.innerHTML = `
+                        <div class="no-data-card">
+                            📥 No local logs found. Submit a query via our contact page to see data render here live!
+                        </div>`;
+                    return;
+                }
+
+                submissions.slice().reverse().forEach(s => {
+                    const card = document.createElement('div');
+                    card.className = 'submission-card';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <h4>${s.name}</h4>
+                        </div>
+                        <p class="user-mail"><strong>Email:</strong> ${s.email}</p>
+                        <p class="user-msg"><strong>Message:</strong> "${s.message}"</p>
+                    `;
+                    gridContainer.appendChild(card);
+                });
+            }
+
+            clearBtn.addEventListener('click', function() {
+                if (confirm("Are you sure you want to completely erase all locally stored data items on this machine?")) {
+                    localStorage.removeItem("contacts");
+                    displayEntries();
+                }
+            });
+
+            displayEntries();
+        });
+    </script>
+</body>
+</html>
